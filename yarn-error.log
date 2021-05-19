@@ -1,0 +1,50 @@
+Arguments: 
+  /Users/krisztiaan/n/bin/node /Users/krisztiaan/n/bin/yarnpkg install
+
+PATH: 
+  /Users/krisztiaan/.npm/_npx/34735/bin:/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Users/krisztiaan/Library/Android/sdk/emulator:/Users/krisztiaan/Library/Android/sdk/tools:/Users/krisztiaan/Library/Android/sdk/tools/bin:/Users/krisztiaan/Library/Android/sdk/platform-tools:/Users/krisztiaan/n/bin
+
+Yarn version: 
+  1.22.10
+
+Node version: 
+  14.16.1
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: ENFILE: file table overflow, copyfile '/Users/krisztiaan/Library/Caches/Yarn/v6/npm-@babel-plugin-transform-modules-amd-7.14.2-6622806fe1a7c07a1388444222ef9535f2ca17b0-integrity/node_modules/@babel/plugin-transform-modules-amd/README.md' -> '/Users/krisztiaan/dev/eeszt-covid-reader/node_modules/@babel/plugin-transform-modules-amd/README.md'
+
+npm manifest: 
+  {
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "web": "expo start --web",
+      "eject": "expo eject"
+    },
+    "dependencies": {
+      "expo": "~41.0.1",
+      "expo-status-bar": "~1.0.4",
+      "react": "16.13.1",
+      "react-dom": "16.13.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
+      "react-native-web": "~0.13.12"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.9.0",
+      "@types/react": "~16.9.35",
+      "@types/react-native": "~0.63.2",
+      "typescript": "~4.0.0"
+    },
+    "private": true
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
