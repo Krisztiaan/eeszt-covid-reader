@@ -1,0 +1,48 @@
+name: EAS Build
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Install and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Expo
+        uses: expo/expo-github-action@v5
+        with:
+          expo-version: 4.x
+          expo-token: ${{ secrets.EXPO_TOKEN }}
+          expo-cache: true
+
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install
+
+      - name: Build on EAS
+        run: npx eas-cli build --platform all --non-interactive
+
+      - name: Deploy from EAS to iTunes Connect
+        run: npx eas-cli submit -p ios --latest --apple-id=krisz011@icloud.com --asc-app-id=1568361394
+        env:
+          EXPO_APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.EXPO_APPLE_APP_SPECIFIC_PASSWORD }}
+
+      - name: Prepare Google Service Account
+        run: ./.github/scripts/decrypt_secret.sh
+        env:
+          PG_PASSPHRASE: ${{ secrets.PG_PASSPHRASE }}
+
+      - name: Deploy from EAS to Google Play
+        run: npx eas-cli submit -p android --latest --key=$HOME/google-services.json
