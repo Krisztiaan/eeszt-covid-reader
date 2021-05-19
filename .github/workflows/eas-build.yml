@@ -45,4 +45,4 @@ jobs:
           PG_PASSPHRASE: ${{ secrets.PG_PASSPHRASE }}
 
       - name: Deploy from EAS to Google Play
-        run: npx eas-cli submit -p android --latest --key=$HOME/google-services.json
+        run: npx eas-cli submit -p android --latest --key=$GITHUB_WORKSPACE/pg.json
