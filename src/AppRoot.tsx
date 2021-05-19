@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 import { useNetInfo } from '@react-native-community/netinfo';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { BlurView } from 'expo-blur';
-import { Camera } from 'expo-camera';
-import JWT from 'jwt-decode';
-import { ActivityIndicator, Platform, StatusBar, StyleSheet } from 'react-native';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { parse } from 'node-html-parser';
-import { AnimatePresence } from 'framer-motion';
 import format from 'date-fns/format';
 import parseDate from 'date-fns/parse';
 import parseISO from 'date-fns/parseISO';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BlurView } from 'expo-blur';
+import { Camera } from 'expo-camera';
+import { AnimatePresence } from 'framer-motion';
+import JWT from 'jwt-decode';
+import { ActivityIndicator, StatusBar, StyleSheet } from 'react-native';
+import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import matchAll from 'match-all';
 
 import QRFooterButton from './components/QRFooterButton';
 import { Box, Space, Text, ThemeProvider } from './components/Theme';
@@ -93,11 +93,12 @@ async function getProof(data: VedettsegiToken): Promise<Proof> {
   if ('iss' in data) {
     const siteData = await fetch(data.token)
       .then((res) => res.text())
-      .then((res) => parse(res));
+      .then((res) =>
+        res.slice(res.indexOf('<tbody class="table-data">'), res.indexOf('</tbody>') + 9),
+      )
+      .then((res) => matchAll(res, /<td class="table-cell">(.*?)<\/td>/gs).toArray());
 
-    let vaccinationDate = siteData.querySelector(
-      '#main-content > table > tbody > tr:nth-child(3) > td:nth-child(2)',
-    ).textContent;
+    let vaccinationDate = siteData[5];
     try {
       vaccinationDate = format(parseDate(vaccinationDate, 'yyyy.MM.dd', new Date()), 'yyyy-MM-dd');
     } catch {
@@ -106,19 +107,11 @@ async function getProof(data: VedettsegiToken): Promise<Proof> {
 
     return {
       lastValid: new Date().toISOString(),
-      name: siteData.querySelector(
-        '#main-content > table > tbody > tr:nth-child(2) > td:nth-child(2)',
-      ).textContent,
+      name: siteData[3],
       vaccinationDate,
-      personalId: siteData.querySelector(
-        '#main-content > table > tbody > tr:nth-child(5) > td:nth-child(2)',
-      ).textContent,
-      passportId: siteData.querySelector(
-        '#main-content > table > tbody > tr:nth-child(6) > td:nth-child(2)',
-      ).textContent,
-      isValid: siteData
-        .querySelector('#main-content > table > tbody > tr:nth-child(7) > td:nth-child(2) > p')
-        .textContent.includes('valid'),
+      personalId: siteData[9],
+      passportId: siteData[11],
+      isValid: siteData[13].includes('valid'),
     };
   }
   return {
@@ -148,38 +141,15 @@ export default function App(): JSX.Element {
       <ThemeProvider>
         <Box flex bg='bgPrimary' justifyContent='center' alignItems='center'>
           <AnimatePresence>
-            {(() => {
-              switch (hasPermission) {
-                case null:
-                  return (
-                    <Text
-                      from={{ opacity: 1 }}
-                      animate={{ opacity: 1 }}
-                      exit={{
-                        opacity: 0,
-                      }}
-                      px='l'
-                    >
-                      Kamera engedély kérés
-                    </Text>
-                  );
-                case false:
-                  return (
-                    <Text
-                      from={{ opacity: 1 }}
-                      animate={{ opacity: 1 }}
-                      exit={{
-                        opacity: 0,
-                      }}
-                      px='l'
-                    >
-                      Kamera engedély megtagadva, kérjük engedélyezze a rendszer beállítások között
-                    </Text>
-                  );
-                default:
-                  return <BarCodeScreen />;
-              }
-            })()}
+            {hasPermission === true ? (
+              <BarCodeScreen />
+            ) : (
+              <Text px='l'>
+                {hasPermission === null
+                  ? 'Kamera engedély kérés'
+                  : 'Kamera engedély megtagadva, engedélyezze a rendszer beállítások között'}
+              </Text>
+            )}
           </AnimatePresence>
         </Box>
       </ThemeProvider>
@@ -212,6 +182,11 @@ function useScanProof() {
   useEffect(() => {
     if (tokenString && !proof) setLoading(true);
     if (!tokenString || proof) setLoading(false);
+    if (proof && tokenString) {
+      console.log('setting timeout');
+      const timeout = setTimeout(() => setTokenString(null), 5000);
+      return () => clearTimeout(timeout);
+    }
   }, [tokenString, proof]);
 
   useEffect(() => {

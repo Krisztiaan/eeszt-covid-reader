@@ -112,6 +112,7 @@ module.exports = {
 
     'no-underscore-dangle': ['off'],
     'no-console': ['off'],
+    'no-inner-declarations': ['off'],
   },
   overrides: [
     {

@@ -3,9 +3,7 @@ import React from 'react';
 import Ionicons from '@expo/vector-icons/build/Ionicons';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
-import { Platform, StyleSheet } from 'react-native';
-// @ts-expect-error
-import TouchableBounce from 'react-native/Libraries/Components/Touchable/TouchableBounce';
+import { Platform, StyleSheet, Pressable } from 'react-native';
 
 const shouldUseHaptics = Platform.OS === 'ios';
 
@@ -30,9 +28,9 @@ export default function QRFooterButton({
   isActive = false,
   iconName,
   iconSize = 36,
-}: QRFooterButtonProps) {
+}: QRFooterButtonProps): JSX.Element {
   return (
-    <TouchableBounce
+    <Pressable
       hitSlop={hitSlop}
       onPressIn={onPressHaptics}
       onPressOut={onPressHaptics}
@@ -41,7 +39,7 @@ export default function QRFooterButton({
       <BlurView intensity={100} style={styles.container} tint={isActive ? 'default' : 'dark'}>
         <Ionicons name={iconName} size={iconSize} color={isActive ? '#4e9bde' : '#ffffff'} />
       </BlurView>
-    </TouchableBounce>
+    </Pressable>
   );
 }
 
