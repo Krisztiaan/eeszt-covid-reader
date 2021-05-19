@@ -15,9 +15,11 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "hu.krisztiaan.eesztreader",
       "supportsTablet": true
     },
     "android": {
+      "package": "hu.krisztiaan.eesztreader",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000"
