@@ -2,7 +2,7 @@
   "expo": {
     "name": "eeszt-covid-reader",
     "slug": "eeszt-covid-reader",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,17 +13,21 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "hu.krisztiaan.eesztreader",
-      "supportsTablet": true
+      "supportsTablet": true,
+      "buildNumber": "1.0.1"
     },
     "android": {
       "package": "hu.krisztiaan.eesztreader",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000"
-      }
+      },
+      "versionCode": 410010001
     },
     "web": {
       "favicon": "./assets/favicon.png"
