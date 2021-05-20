@@ -7,7 +7,7 @@ import parseISO from 'date-fns/parseISO';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { BlurView } from 'expo-blur';
 import { Camera } from 'expo-camera';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'moti';
 import JWT from 'jwt-decode';
 import { ActivityIndicator, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -160,6 +160,9 @@ export default function App(): JSX.Element {
 function BlurBox({ children }: { children: string | React.ReactNode }) {
   return (
     <Box
+      from={{ opacity: 0, scale: 0.5 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
       paddingHorizontal='s'
       paddingVertical='m'
       borderRadius='m'
