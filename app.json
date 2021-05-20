@@ -27,6 +27,19 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "perpixel",
+            "project": "eeszt-covid-reader",
+            "authToken": "555a715f00444795a770f997372f714670f3a69bd26848c3aa20e73d16f12267",
+            "setCommits": true
+          }
+        }
+      ]
     }
   }
 }
